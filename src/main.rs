@@ -1,5 +1,10 @@
 use std::collections::BTreeSet;
 
+#[derive(Debug)]
+enum Outcome {
+    Sat,
+    Unsat,
+}
 
 pub type Var = usize;
 pub type Clause = BTreeSet<(Var, bool)>;
@@ -25,12 +30,12 @@ fn clauses_with(v: Var, b: bool, c: &ClauseSet) -> ClauseSet {
     out.into_iter().collect()
 }
 
-fn run(mut c: ClauseSet) -> bool {
+fn run(mut c: ClauseSet) -> Outcome {
     loop {
-        if c.contains(&Default::default()) { return false; }
+        if c.contains(&Default::default()) { return Outcome::Unsat; }
         let n = c.len();
         c = step(c);
-        if n == c.len() { return true; }
+        if n == c.len() { return Outcome::Sat; }
     }
 }
 
