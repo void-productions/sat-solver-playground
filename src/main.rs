@@ -1,3 +1,8 @@
+mod parse;
+
+mod symbol;
+pub use symbol::*;
+
 use std::collections::BTreeSet;
 
 #[derive(Debug)]
@@ -6,8 +11,9 @@ enum Outcome {
     Unsat,
 }
 
-pub type Var = usize;
-pub type Clause = BTreeSet<(Var, bool)>;
+pub type Var = Id;
+pub type Literal = (Var, bool);
+pub type Clause = BTreeSet<Literal>;
 pub type ClauseSet = BTreeSet<Clause>;
 
 fn vars(c: &ClauseSet) -> BTreeSet<Var> {
@@ -57,9 +63,12 @@ fn set<T: Ord>(t: impl IntoIterator<Item=T>) -> BTreeSet<T> {
 }
 
 fn main() {
+    let mut smap = SymbolMap::new();
+    let a = smap.add("A".to_string());
+    let b = smap.add("B".to_string());
     let c = set([
-        set([(0, true)]),
-        set([(0, false)]),
+        set([(a, true)]),
+        set([(b, false)]),
     ]);
     dbg!(run(c));
 }
