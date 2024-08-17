@@ -44,6 +44,7 @@ fn run(mut c: ClauseSet) -> Outcome {
     loop {
         if c.contains(&Default::default()) { return Outcome::Unsat; }
         let n = c.len();
+        c = filter(c);
         c = step(c);
         if n == c.len() { return Outcome::Sat; }
     }
@@ -65,13 +66,22 @@ fn step(mut c: ClauseSet) -> ClauseSet {
     c
 }
 
-fn set<T: Ord>(t: impl IntoIterator<Item=T>) -> BTreeSet<T> {
-    t.into_iter().collect()
+fn pos_vars(clause: &Clause) -> BTreeSet<Id> {
+    clause.iter().filter(|(_, b)| *b).map(|(x, _)| *x).collect()
+}
+
+fn neg_vars(clause: &Clause) -> BTreeSet<Id> {
+    clause.iter().filter(|(_, b)| !*b).map(|(x, _)| *x).collect()
+}
+
+fn filter(mut c: ClauseSet) -> ClauseSet {
+    c.retain(|x| pos_vars(x).is_disjoint(&neg_vars(x)));
+    c
 }
 
 fn main() {
     let mut smap = SymbolMap::new();
-    let a = parse("(~B)&(B)", &mut smap);
+    let a = parse("(A)&(~B)&(~A|B)", &mut smap);
     dbg!(a.draw(&smap));
     dbg!(run(a));
 }
