@@ -28,7 +28,7 @@ pub fn parse_sudoku(s: &str) -> Sudoku {
 }
 
 // exactly one of these variables should be true.
-fn push_one_of(vars: Vec<Var>, smap: &mut SymbolMap, c: &mut ClauseSet) {
+fn push_one_of(vars: Vec<Var>, c: &mut ClauseSet) {
     let disj = vars.iter().map(|x| (*x, true)).collect();
     c.insert(disj);
 
@@ -75,22 +75,22 @@ fn index_sets() -> Vec<BTreeSet<(u8, u8)>> {
     out
 }
 
-fn base_clauseset(smap: &mut SymbolMap) -> ClauseSet {
+fn base_clauseset() -> ClauseSet {
     let mut c = ClauseSet::new();
 
     // each cell contains exactly one value.
     for x in 1..=9 {
         for y in 1..=9 {
-            let vars = (1..=9).map(|n| var(x, y, n, smap)).collect();
-            push_one_of(vars, smap, &mut c);
+            let vars = (1..=9).map(|n| var(x, y, n)).collect();
+            push_one_of(vars, &mut c);
         }
     }
 
     // each index set contains exactly one n.
     for n in 1..=9 {
         for set in index_sets() {
-            let vars = set.iter().map(|(x, y)| var(*x, *y, n, smap)).collect();
-            push_one_of(vars, smap, &mut c);
+            let vars = set.iter().map(|(x, y)| var(*x, *y, n)).collect();
+            push_one_of(vars,&mut c);
         }
     }
 
@@ -98,9 +98,9 @@ fn base_clauseset(smap: &mut SymbolMap) -> ClauseSet {
 }
 
 // x, y, val in [1, 9]
-fn var(x: u8, y: u8, val: u8, smap: &mut SymbolMap) -> Id {
+fn var(x: u8, y: u8, val: u8) -> Id {
     let name = format!("v{}{}{}", x, y, val);
-    smap.add(name)
+    gsymb_add(name)
 }
 
 // x, y in [1, 9]
@@ -110,12 +110,12 @@ fn idx(x: u8, y: u8) -> usize {
     x + y*9
 }
 
-pub fn sudoku_to_clauseset(s: &Sudoku, smap: &mut SymbolMap) -> ClauseSet {
-    let mut a = base_clauseset(smap);
+pub fn sudoku_to_clauseset(s: &Sudoku) -> ClauseSet {
+    let mut a = base_clauseset();
     for x in 1..=9 {
         for y in 1..=9 {
             if let Field::Num(n) = s[idx(x, y)] {
-                let lit = (var(x, y, n, smap), true);
+                let lit = (var(x, y, n), true);
                 let mut clause = Clause::default();
                 clause.insert(lit);
                 a.insert(clause);

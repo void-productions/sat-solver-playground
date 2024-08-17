@@ -10,27 +10,29 @@ pub fn gsymb_add(x: String) -> Id {
 }
 
 pub fn gsymb_get(x: Id) -> String {
-    let mut g = GSYMB.lock().unwrap();
+    let g = GSYMB.lock().unwrap();
     g.get(x).to_string()
 }
 
 #[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug)]
 pub struct Id(usize);
 
-pub struct SymbolMap {
+// implementation of symbol map.
+
+struct SymbolMap {
     string_to_id: BTreeMap<String, Id>,
     id_to_string: Vec<String>,
 }
 
 impl SymbolMap {
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self {
             string_to_id: Default::default(),
             id_to_string: Default::default(),
         }
     }
 
-    pub fn add(&mut self, x: String) -> Id {
+    fn add(&mut self, x: String) -> Id {
         if let Some(y) = self.string_to_id.get(&x) {
             return *y;
         } else {
@@ -41,7 +43,7 @@ impl SymbolMap {
         }
     }
 
-    pub fn get(&self, id: Id) -> &str {
+    fn get(&self, id: Id) -> &str {
         self.id_to_string.get(id.0).unwrap()
     }
 }

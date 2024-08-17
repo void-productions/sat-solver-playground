@@ -1,12 +1,12 @@
 use crate::*;
 
 fn should_sat(s: &str) {
-    let a = parse(s, &mut SymbolMap::new());
+    let a = parse(s);
     assert!(run(a) == Outcome::Sat);
 }
 
 fn should_unsat(s: &str) {
-    let a = parse(s, &mut SymbolMap::new());
+    let a = parse(s);
     assert!(run(a) == Outcome::Unsat);
 }
 

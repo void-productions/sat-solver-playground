@@ -1,33 +1,33 @@
 use crate::*;
 
 pub trait Draw {
-    fn draw(&self, smap: &SymbolMap) -> String;
+    fn draw(&self) -> String;
 }
 
 impl Draw for Id {
-    fn draw(&self, smap: &SymbolMap) -> String {
-        smap.get(*self).to_string()
+    fn draw(&self) -> String {
+        gsymb_get(*self).to_string()
     }
 }
 
 impl Draw for Literal {
-    fn draw(&self, smap: &SymbolMap) -> String {
+    fn draw(&self) -> String {
         let (var, b) = self;
         let opt_neg = if *b { "" } else { "~" };
-        format!("{}{}", opt_neg, var.draw(smap))
+        format!("{}{}", opt_neg, var.draw())
     }
 }
 
 impl Draw for Clause {
-    fn draw(&self, smap: &SymbolMap) -> String {
-        let v: Vec<_> = self.iter().map(|x| x.draw(smap)).collect();
+    fn draw(&self) -> String {
+        let v: Vec<_> = self.iter().map(|x| x.draw()).collect();
         format!("({})", v.join("|"))
     }
 }
 
 impl Draw for ClauseSet {
-    fn draw(&self, smap: &SymbolMap) -> String {
-        let v: Vec<_> = self.iter().map(|x| x.draw(smap)).collect();
+    fn draw(&self) -> String {
+        let v: Vec<_> = self.iter().map(|x| x.draw()).collect();
         v.join("&")
     }
 }

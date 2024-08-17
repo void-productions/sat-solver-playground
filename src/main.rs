@@ -106,6 +106,6 @@ fn main() {
 
     ";
     let s = parse_sudoku(s);
-    let a = sudoku_to_clauseset(&s, &mut SymbolMap::new());
+    let a = sudoku_to_clauseset(&s);
     dbg!(run(a));
 }
