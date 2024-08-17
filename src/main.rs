@@ -48,12 +48,15 @@ fn clauses_with(v: Var, b: bool, c: &ClauseSet) -> ClauseSet {
 
 fn run(mut c: ClauseSet) -> Outcome {
     c = filter(c);
+    dump(&c, "A");
     loop {
         if c.contains(&Default::default()) { return Outcome::Unsat; }
 
         let c_old = c.clone();
         c = step(c);
+        dump(&c, "B");
         c = filter(c);
+        dump(&c, "C");
         if c_old == c { return Outcome::Sat; }
     }
 }
@@ -68,7 +71,11 @@ fn step(c: ClauseSet) -> ClauseSet {
                 let mut n_ = n.clone();
                 n_.remove(&(v, false));
 
-                new_c.insert(&p_ | &n_);
+                let new = &p_ | &n_;
+                // This heuristic conflicts with completeness, but seems to work in practice so far.
+                if p.len() == 1 || n.len() == 1 || new.len() < 4 {
+                    new_c.insert(new);
+                }
             }
         }
     }
@@ -92,6 +99,14 @@ fn filter(mut c: ClauseSet) -> ClauseSet {
             !c.iter().any(|y| y.is_subset(x) && y != x)
          ).collect();
     c
+}
+
+fn dump(c: &ClauseSet, s: &str) {
+    println!("{}:\n", s);
+    dbg!(c.len());
+    let c2: ClauseSet = c.iter().filter(|x| x.len() == 1 && x.iter().next().unwrap().1).cloned().collect();
+    println!("{}", c2.draw());
+    dbg!(c2.len());
 }
 
 fn main() {
