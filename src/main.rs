@@ -7,6 +7,9 @@ pub use symbol::*;
 mod draw;
 pub use draw::*;
 
+mod sudoku;
+pub use sudoku::*;
+
 mod tst;
 
 use std::collections::BTreeSet;
