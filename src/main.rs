@@ -4,6 +4,9 @@ pub use parse::*;
 mod symbol;
 pub use symbol::*;
 
+mod draw;
+pub use draw::*;
+
 use std::collections::BTreeSet;
 
 #[derive(Debug)]
@@ -65,7 +68,7 @@ fn set<T: Ord>(t: impl IntoIterator<Item=T>) -> BTreeSet<T> {
 
 fn main() {
     let mut smap = SymbolMap::new();
-    let a = parse("(~B)&(B)", &mut SymbolMap::new());
-    dbg!(&a);
+    let a = parse("(~B)&(B)", &mut smap);
+    dbg!(a.draw(&smap));
     dbg!(run(a));
 }
