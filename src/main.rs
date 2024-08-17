@@ -76,6 +76,11 @@ fn neg_vars(clause: &Clause) -> BTreeSet<Id> {
 
 fn filter(mut c: ClauseSet) -> ClauseSet {
     c.retain(|x| pos_vars(x).is_disjoint(&neg_vars(x)));
+    c = c.iter()
+         .cloned()
+         .filter(|x|
+            !c.iter().any(|y| y.is_subset(x) && y != x)
+         ).collect();
     c
 }
 
