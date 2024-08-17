@@ -7,9 +7,11 @@ pub use symbol::*;
 mod draw;
 pub use draw::*;
 
+mod tst;
+
 use std::collections::BTreeSet;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 enum Outcome {
     Sat,
     Unsat,
