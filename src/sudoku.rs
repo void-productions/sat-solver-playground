@@ -28,17 +28,19 @@ pub fn parse_sudoku(s: &str) -> Sudoku {
 }
 
 // exactly one of these variables should be true.
-fn push_one_of(vars: Vec<Var>, c: &mut ClauseSet) {
+fn push_one_of(vars: Vec<Var>, c: &mut ClauseSet, exactly: bool) {
     let disj = vars.iter().map(|x| (*x, true)).collect();
     c.insert(disj);
 
-    for x in &vars {
-        for y in &vars {
-            if x != y {
-                let mut clause = Clause::new();
-                clause.insert((*x, false));
-                clause.insert((*y, false));
-                c.insert(clause);
+    if exactly {
+        for x in &vars {
+            for y in &vars {
+                if x != y {
+                    let mut clause = Clause::new();
+                    clause.insert((*x, false));
+                    clause.insert((*y, false));
+                    c.insert(clause);
+                }
             }
         }
     }
@@ -82,7 +84,7 @@ fn base_clauseset() -> ClauseSet {
     for x in 1..=9 {
         for y in 1..=9 {
             let vars = (1..=9).map(|n| var(x, y, n)).collect();
-            push_one_of(vars, &mut c);
+            push_one_of(vars, &mut c, true);
         }
     }
 
@@ -90,7 +92,7 @@ fn base_clauseset() -> ClauseSet {
     for n in 1..=9 {
         for set in index_sets() {
             let vars = set.iter().map(|(x, y)| var(*x, *y, n)).collect();
-            push_one_of(vars, &mut c);
+            push_one_of(vars, &mut c, false);
         }
     }
 
