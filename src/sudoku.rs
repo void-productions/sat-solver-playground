@@ -1,14 +1,14 @@
 use crate::*;
 
 // sudoku[x][y]
-type Sudoku = Vec<Field>;
+pub type Sudoku = Vec<Field>;
 
-enum Field {
+pub enum Field {
     Num(u8),
     Empty,
 }
 
-fn parse_sudoku(s: &str) -> Sudoku {
+pub fn parse_sudoku(s: &str) -> Sudoku {
     let mut s = s.to_string();
     loop {
         let n = s.len();
@@ -110,7 +110,7 @@ fn idx(x: u8, y: u8) -> usize {
     x + y*9
 }
 
-fn sudoku_to_clauseset(s: &Sudoku, smap: &mut SymbolMap) -> ClauseSet {
+pub fn sudoku_to_clauseset(s: &Sudoku, smap: &mut SymbolMap) -> ClauseSet {
     let mut a = base_clauseset(smap);
     for x in 1..=9 {
         for y in 1..=9 {
