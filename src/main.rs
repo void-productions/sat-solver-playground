@@ -1,4 +1,5 @@
 mod parse;
+pub use parse::*;
 
 mod symbol;
 pub use symbol::*;
@@ -64,11 +65,7 @@ fn set<T: Ord>(t: impl IntoIterator<Item=T>) -> BTreeSet<T> {
 
 fn main() {
     let mut smap = SymbolMap::new();
-    let a = smap.add("A".to_string());
-    let b = smap.add("B".to_string());
-    let c = set([
-        set([(a, true)]),
-        set([(b, false)]),
-    ]);
-    dbg!(run(c));
+    let a = parse("(~B)&(B)", &mut SymbolMap::new());
+    dbg!(&a);
+    dbg!(run(a));
 }

@@ -15,9 +15,9 @@ pub fn parse(s: &str, smap: &mut SymbolMap) -> ClauseSet {
     loop {
         if s.len() == 0 { break; }
         let (c, s2) = parse_clause(&s, smap);
+        out.insert(c);
         if s2.len() == 0 { break; }
         assert!(s2.chars().next().unwrap() == '&');
-        out.insert(c);
         s = &s2[1..];
     }
     out
@@ -40,7 +40,7 @@ fn parse_clause<'s>(s: &'s str, smap: &mut SymbolMap) -> (Clause, &'s str) {
         s = s2;
 
         let ch = s.chars().next().unwrap();
-        if ch == ')' { 
+        if ch == ')' {
             return (out, &s[1..]);
         } else {
             assert!(ch == '|');
