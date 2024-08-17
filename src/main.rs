@@ -43,11 +43,12 @@ fn clauses_with(v: Var, b: bool, c: &ClauseSet) -> ClauseSet {
 }
 
 fn run(mut c: ClauseSet) -> Outcome {
+    c = filter(c);
     loop {
         if c.contains(&Default::default()) { return Outcome::Unsat; }
         let n = c.len();
-        c = filter(c);
         c = step(c);
+        c = filter(c);
         if n == c.len() { return Outcome::Sat; }
     }
 }
