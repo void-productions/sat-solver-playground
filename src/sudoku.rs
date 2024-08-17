@@ -92,7 +92,7 @@ fn base_clauseset() -> ClauseSet {
     for n in 1..=9 {
         for set in index_sets() {
             let vars = set.iter().map(|(x, y)| var(*x, *y, n)).collect();
-            push_one_of(vars, &mut c, false);
+            push_one_of(vars, &mut c, true);
         }
     }
 

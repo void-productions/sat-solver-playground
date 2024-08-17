@@ -73,7 +73,7 @@ fn step(c: ClauseSet) -> ClauseSet {
 
                 let new = &p_ | &n_;
                 // This heuristic conflicts with completeness, but seems to work in practice so far.
-                if p.len() == 1 || n.len() == 1 || new.len() < 4 {
+                if p.len() == 1 || n.len() == 1 || new.len() <= 2 {
                     new_c.insert(new);
                 }
             }
