@@ -53,9 +53,12 @@ fn step(mut c: ClauseSet) -> ClauseSet {
     for v in vars(&c) {
         for p in clauses_with(v, true, &c) {
             for n in clauses_with(v, false, &c) {
-                let mut new = p.clone();
-                new.extend(n);
-                c.insert(new);
+                let mut p_ = p.clone();
+                p_.remove(&(v, true));
+                let mut n_ = n.clone();
+                n_.remove(&(v, false));
+
+                c.insert(&p_ | &n_);
             }
         }
     }
