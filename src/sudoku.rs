@@ -28,6 +28,14 @@ fn parse_sudoku(s: &str) -> Sudoku {
 }
 
 fn base_clauseset(smap: &mut SymbolMap) -> ClauseSet {
+    // for each (x, y)-cell:
+    // - a big disjunction saying it should have at least one value
+    // - and pairwise negated disjunctions to express it shouldn't have two
+
+    // for each value n, and each cell set S:
+    // - a big disjunction saying S should have at least one n
+    // - and pairwise negated disjunctions to express it shouldn't have two
+
     todo!()
 }
 
