@@ -10,6 +10,7 @@ pub use draw::*;
 mod sudoku;
 pub use sudoku::*;
 
+#[cfg(test)]
 mod tst;
 
 use std::collections::BTreeSet;
@@ -56,7 +57,8 @@ fn run(mut c: ClauseSet) -> Outcome {
     }
 }
 
-fn step(mut c: ClauseSet) -> ClauseSet {
+fn step(c: ClauseSet) -> ClauseSet {
+    let mut new_c = c.clone();
     for v in vars(&c) {
         for p in clauses_with(v, true, &c) {
             for n in clauses_with(v, false, &c) {
@@ -65,11 +67,12 @@ fn step(mut c: ClauseSet) -> ClauseSet {
                 let mut n_ = n.clone();
                 n_.remove(&(v, false));
 
-                c.insert(&p_ | &n_);
+                new_c.insert(&p_ | &n_);
             }
         }
     }
-    c
+
+    new_c
 }
 
 fn pos_vars(clause: &Clause) -> BTreeSet<Id> {
