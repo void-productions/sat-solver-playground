@@ -1,13 +1,16 @@
 use crate::*;
 
-fn should_sat(s: &str) {
+fn should(s: &str, outcome: Outcome) {
     let a = parse(s);
-    assert!(run(a) == Outcome::Sat);
+    assert_eq!(run(a), outcome);
+}
+
+fn should_sat(s: &str) {
+    should(s, Outcome::Sat);
 }
 
 fn should_unsat(s: &str) {
-    let a = parse(s);
-    assert!(run(a) == Outcome::Unsat);
+    should(s, Outcome::Unsat);
 }
 
 #[test]
