@@ -50,10 +50,11 @@ fn run(mut c: ClauseSet) -> Outcome {
     c = filter(c);
     loop {
         if c.contains(&Default::default()) { return Outcome::Unsat; }
-        let n = c.len();
+
+        let c_old = c.clone();
         c = step(c);
         c = filter(c);
-        if n == c.len() { return Outcome::Sat; }
+        if c_old == c { return Outcome::Sat; }
     }
 }
 
