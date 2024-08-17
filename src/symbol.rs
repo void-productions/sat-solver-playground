@@ -1,4 +1,18 @@
 use std::collections::BTreeMap;
+use std::sync::*;
+
+// global symbol map.
+static GSYMB: LazyLock<Mutex<SymbolMap>> = LazyLock::new(|| Mutex::from(SymbolMap::new()));
+
+pub fn gsymb_add(x: String) -> Id {
+    let mut g = GSYMB.lock().unwrap();
+    g.add(x)
+}
+
+pub fn gsymb_get(x: Id) -> String {
+    let mut g = GSYMB.lock().unwrap();
+    g.get(x).to_string()
+}
 
 #[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug)]
 pub struct Id(usize);
