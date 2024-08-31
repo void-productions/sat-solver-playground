@@ -36,6 +36,8 @@ impl State {
     }
 
     fn apply_decision(&mut self, decision: Literal) {
+        self.assignment.insert(decision.0, decision.1);
+
         let negated_decision = &negate_literal(decision);
         self.knowledge_base.retain(|c| !c.contains(&decision));
 
