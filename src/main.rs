@@ -1,3 +1,5 @@
+#![allow(unused_imports)]
+
 use std::collections::BTreeSet;
 use std::sync::atomic::Ordering;
 
@@ -14,13 +16,13 @@ mod sudoku;
 pub use sudoku::*;
 
 mod dpll;
-use dpll::run_dpll;
-use crate::dpll::DECISION_COUNTER;
+pub use dpll::*;
 
 mod knowledge_base;
-use crate::knowledge_base::{dedup_knowledge_base, Literal, Outcome};
+pub use knowledge_base::*;
 
 mod heuristics;
+pub use heuristics::*;
 
 #[cfg(test)]
 mod tst;
@@ -41,8 +43,4 @@ fn main() {
         }
     }
     println!("num decisions: {}", DECISION_COUNTER.load(Ordering::Relaxed));
-}
-
-fn negate_literal((v, b): Literal) -> Literal {
-    (v, !b)
 }

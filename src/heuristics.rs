@@ -1,9 +1,7 @@
-use crate::{negate_literal, Literal};
 use std::collections::BTreeSet;
-use crate::knowledge_base::KnowledgeBase;
 use rand::prelude::*;
-use crate::knowledge_base::Assignment;
-use crate::dpll::State;
+
+use crate::*;
 
 type Heuristic = fn(knowledge_base: &KnowledgeBase, l: Literal) -> f32;
 

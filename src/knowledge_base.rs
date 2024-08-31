@@ -1,5 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
-use crate::Id;
+
+use crate::*;
 
 pub type Assignment = BTreeMap<Var, bool>;
 
@@ -24,4 +25,8 @@ pub fn dedup_knowledge_base(knowledge_base: KnowledgeBase) -> KnowledgeBase {
         }
     }
     deduped_base
+}
+
+pub fn negate_literal((v, b): Literal) -> Literal {
+    (v, !b)
 }

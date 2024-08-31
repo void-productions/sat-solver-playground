@@ -1,5 +1,4 @@
 use crate::*;
-use crate::knowledge_base::{Clause, KnowledgeBase};
 
 pub trait Draw {
     fn draw(&self) -> String;
