@@ -11,13 +11,13 @@ pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
 }
 
 #[derive(Clone)]
-struct State {
-    knowledge_base: KnowledgeBase,
-    assignment: Assignment,
+pub struct State {
+    pub knowledge_base: KnowledgeBase,
+    pub assignment: Assignment,
 }
 
 impl State {
-    fn simplify(&mut self) {
+    pub fn simplify(&mut self) {
         loop {
             let decisions: Vec<_> = self.knowledge_base
                 .iter()
@@ -35,7 +35,7 @@ impl State {
         }
     }
 
-    fn apply_decision(&mut self, decision: Literal) {
+    pub fn apply_decision(&mut self, decision: Literal) {
         self.assignment.insert(decision.0, decision.1);
 
         let negated_decision = &negate_literal(decision);
