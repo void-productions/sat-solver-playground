@@ -32,49 +32,8 @@ pub type Clause = BTreeSet<Literal>;
 pub type KnowledgeBase = Vec<Clause>;
 
 fn main() {
-    let easy = "
--4- --- --5
-568 -1- 4--
-1-7 -54 -6-
-
---- --8 ---
-73- 162 -98
-685 47- -3-
-
-4-- 8-- 25-
---- 7-6 3--
--26 3-5 --1
-
-    ";
-
-    let hard = "
-8-- --- ---
---3 6-- ---
--7- -9- 2--
-
--5- --7 ---
---- -45 7--
---- 1-- -3-
-
---1 --- -68
---8 5-- -1-
--9- --- 4--
-    ";
-
-    let empty = "
---- --- ---
---- --- ---
---- --- ---
-
---- --- ---
---- --- ---
---- --- ---
-
---- --- ---
---- --- ---
---- --- ---
-    ";
-    let s = parse_sudoku(empty);
+    let example = get_example();
+    let s = parse_sudoku(example);
     print_sudoku(&s);
     let a = sudoku_to_knowledge_base(&s);
     match run_dpll(a) {

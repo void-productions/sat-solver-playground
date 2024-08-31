@@ -163,3 +163,49 @@ fn parse_variable(input: &str) -> (usize, usize, usize) {
     // Ensure the vector contains exactly three elements and return them as a tuple
     (digits[0], digits[1], digits[2])
 }
+
+pub fn get_example() -> &'static str {
+    let _easy = "
+-4- --- --5
+568 -1- 4--
+1-7 -54 -6-
+
+--- --8 ---
+73- 162 -98
+685 47- -3-
+
+4-- 8-- 25-
+--- 7-6 3--
+-26 3-5 --1
+
+    ";
+
+    let _hard = "
+8-- --- ---
+--3 6-- ---
+-7- -9- 2--
+
+-5- --7 ---
+--- -45 7--
+--- 1-- -3-
+
+--1 --- -68
+--8 5-- -1-
+-9- --- 4--
+    ";
+
+    let _empty = "
+--- --- ---
+--- --- ---
+--- --- ---
+
+--- --- ---
+--- --- ---
+--- --- ---
+
+--- --- ---
+--- --- ---
+--- --- ---
+    ";
+    _hard
+}
