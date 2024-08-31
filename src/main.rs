@@ -24,11 +24,14 @@ pub use knowledge_base::*;
 mod heuristics;
 pub use heuristics::*;
 
+mod examples;
+pub use examples::*;
+
 #[cfg(test)]
 mod tst;
 
 fn main() {
-    let example = get_example();
+    let example = get_example("extreme");
     let s = parse_sudoku(example);
     print_sudoku(&s);
     let a = sudoku_to_knowledge_base(&s);
