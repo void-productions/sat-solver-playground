@@ -47,9 +47,17 @@ fn main() {
 
     ";
     let s = parse_sudoku(s);
+    print_sudoku(&s);
     let a = sudoku_to_knowledge_base(&s);
-    let outcome = run_dpll(a);
-    dbg!(outcome);
+    match run_dpll(a) {
+        Outcome::Sat(ass) => {
+            print_sudoku(&assigment_to_sudoku(&ass));
+        }
+        Outcome::Unsat => {
+            println!("Unsatisfied");
+        }
+    }
+
 }
 
 fn negate_literal((v, b): Literal) -> Literal {

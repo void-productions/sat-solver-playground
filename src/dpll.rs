@@ -1,11 +1,11 @@
 use crate::{negate_literal, Assignment, KnowledgeBase, Literal, Outcome};
 
 pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
-    let knowledge_base = simplify(knowledge_base);
+    let (knowledge_base, simplify_assignment) = simplify(knowledge_base);
 
     // check satisfied
     if knowledge_base.is_empty() {
-        return Outcome::Sat(Assignment::new());
+        return Outcome::Sat(simplify_assignment);
     }
     // check unsatisfiable
     if knowledge_base.iter().any(|c| c.is_empty()) {
@@ -13,23 +13,25 @@ pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
     }
 
     let decision = get_decision(&knowledge_base);
-    if let Some(outcome) = recurse_dpll(&knowledge_base, decision) {
-        return outcome;
+    if let Outcome::Sat(mut assignment) = recurse_dpll(&knowledge_base, decision) {
+        assignment.extend(simplify_assignment);
+        return Outcome::Sat(assignment);
     }
     let negated_decision = negate_literal(decision);
-    if let Some(outcome) = recurse_dpll(&knowledge_base, negated_decision) {
-        return outcome;
+    if let Outcome::Sat(mut assignment) = recurse_dpll(&knowledge_base, negated_decision) {
+        assignment.extend(simplify_assignment);
+        return Outcome::Sat(assignment);
     }
     Outcome::Unsat
 }
 
-fn recurse_dpll(knowledge_base: &KnowledgeBase, decision: Literal) -> Option<Outcome> {
+fn recurse_dpll(knowledge_base: &KnowledgeBase, decision: Literal) -> Outcome {
     let new_knowledge_base = apply_decision(knowledge_base.clone(), decision);
     if let Outcome::Sat(mut assignment) = run_dpll(new_knowledge_base) {
         assignment.insert(decision.0, decision.1);
-        return Some(Outcome::Sat(assignment));
+        return Outcome::Sat(assignment);
     }
-    None
+    Outcome::Unsat
 }
 
 fn get_decision(knowledge_base: &KnowledgeBase) -> Literal {
@@ -47,7 +49,8 @@ fn apply_decision(mut knowledge_base: KnowledgeBase, decision: Literal) -> Knowl
     knowledge_base
 }
 
-fn simplify(mut knowledge_base: KnowledgeBase) -> KnowledgeBase {
+fn simplify(mut knowledge_base: KnowledgeBase) -> (KnowledgeBase, Assignment) {
+    let mut decisions_complete = Assignment::new();
     loop {
         let decisions: Vec<_> = knowledge_base
             .iter()
@@ -59,10 +62,11 @@ fn simplify(mut knowledge_base: KnowledgeBase) -> KnowledgeBase {
             break;
         }
 
-        for decision in decisions {
+        for &decision in &decisions {
             knowledge_base = apply_decision(knowledge_base, decision);
         }
+        decisions_complete.extend(decisions);
     }
 
-    knowledge_base
+    (knowledge_base, decisions_complete)
 }
