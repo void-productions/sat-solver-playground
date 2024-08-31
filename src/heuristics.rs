@@ -1,27 +1,30 @@
 use crate::{negate_literal, Literal};
 use std::collections::BTreeSet;
 use crate::knowledge_base::KnowledgeBase;
+use rand::prelude::*;
 
 type Heuristic = fn(knowledge_base: &KnowledgeBase, l: Literal) -> f32;
 
 pub const USED_HEURISTIC: Heuristic = fractional;
 
 pub fn baseline(knowledge_base: &KnowledgeBase, l: Literal) -> f32 {
-    (knowledge_base.first().unwrap().first().unwrap() == &l) as i32 as f32
+    let l_neg = negate_literal(l);
+    (knowledge_base.first().unwrap().first().unwrap() == &l_neg) as i32 as f32
+}
+
+pub fn random_heuristic(_knowledge_base: &KnowledgeBase, l: Literal) -> f32 {
+    rand::random::<f32>().abs()
 }
 
 pub fn fractional(knowledge_base: &KnowledgeBase, l: Literal) -> f32 {
     let neg_l = negate_literal(l);
     let mut sum: f32 = 0.0;
-    if !l.1 {
-        return -1000.0;
-    }
     for clause in knowledge_base {
-        if clause.contains(&neg_l) || clause.contains(&l) {
+        if clause.contains(&neg_l) {
             sum += 1.0 / clause.len() as f32;
         }
     }
-    -sum
+    sum
 }
 
 pub fn get_decision(knowledge_base: &KnowledgeBase) -> Literal {

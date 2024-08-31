@@ -1,7 +1,11 @@
+use std::sync::{LazyLock, Mutex};
+use std::sync::atomic::{AtomicU32, Ordering};
 use crate::draw::Draw;
 use crate::heuristics::get_decision;
 use crate::{negate_literal, Literal, Outcome};
 use crate::knowledge_base::{Assignment, KnowledgeBase};
+
+pub static DECISION_COUNTER: AtomicU32 = AtomicU32::new(0);
 
 pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
     State {
@@ -60,6 +64,7 @@ impl State {
 
         let decision = get_decision(&self.knowledge_base);
         println!("{}", decision.draw());
+        DECISION_COUNTER.fetch_add(1, Ordering::AcqRel);
 
         let mut clone = self.clone();
         clone.apply_decision(decision);

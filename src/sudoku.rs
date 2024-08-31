@@ -182,7 +182,6 @@ pub fn get_example() -> &'static str {
 4-- 8-- 25-
 --- 7-6 3--
 -26 3-5 --1
-
     ";
 
     let _hard = "
@@ -212,5 +211,5 @@ pub fn get_example() -> &'static str {
 --- --- ---
 --- --- ---
     ";
-    _easy
+    _empty
 }
