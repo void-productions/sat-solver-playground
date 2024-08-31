@@ -1,5 +1,5 @@
-use std::collections::BTreeSet;
 use rand::prelude::*;
+use std::collections::BTreeSet;
 
 use crate::*;
 

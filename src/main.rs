@@ -45,5 +45,8 @@ fn main() {
             println!("Unsatisfied");
         }
     }
-    println!("num decisions: {}", DECISION_COUNTER.load(Ordering::Relaxed));
+    println!(
+        "num decisions: {}",
+        DECISION_COUNTER.load(Ordering::Relaxed)
+    );
 }

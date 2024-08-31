@@ -8,7 +8,8 @@ pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
     State {
         knowledge_base,
         assignment: Assignment::new(),
-    }.dpll()
+    }
+    .dpll()
 }
 
 #[derive(Clone)]
@@ -20,7 +21,8 @@ pub struct State {
 impl State {
     pub fn simplify(&mut self) {
         loop {
-            let decisions: Vec<_> = self.knowledge_base
+            let decisions: Vec<_> = self
+                .knowledge_base
                 .iter()
                 .filter(|c| c.len() == 1)
                 .map(|c| *c.iter().next().unwrap())
@@ -66,7 +68,9 @@ impl State {
         let mut clone = self.clone();
         clone.apply_decision(decision);
         let outcome1 = clone.dpll();
-        if let Outcome::Sat(_) = outcome1 { return outcome1; }
+        if let Outcome::Sat(_) = outcome1 {
+            return outcome1;
+        }
 
         let negated_decision = negate_literal(decision);
         self.apply_decision(negated_decision);
