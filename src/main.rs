@@ -12,6 +12,9 @@ pub use sudoku::*;
 
 mod dpll;
 
+#[cfg(test)]
+mod tst;
+
 use std::collections::{BTreeMap, BTreeSet};
 use crate::dpll::run_dpll;
 
