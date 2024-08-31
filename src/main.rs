@@ -28,7 +28,7 @@ fn main() {
     let s = parse_sudoku(example);
     print_sudoku(&s);
     let a = sudoku_to_knowledge_base(&s);
-    println!("knowledge base: {a}");
+    println!("knowledge base:\n{}", a.draw());
     match run_dpll(a) {
         Outcome::Sat(ass) => {
             print_sudoku(&assigment_to_sudoku(&ass));

@@ -212,5 +212,5 @@ pub fn get_example() -> &'static str {
 --- --- ---
 --- --- ---
     ";
-    _hard
+    _easy
 }

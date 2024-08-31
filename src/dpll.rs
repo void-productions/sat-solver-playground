@@ -65,7 +65,7 @@ impl State {
         if let Outcome::Sat(_) = outcome1 { return outcome1; }
 
         let negated_decision = negate_literal(decision);
-        self.apply_decision(decision);
+        self.apply_decision(negated_decision);
         self.dpll()
     }
 }
