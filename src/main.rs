@@ -10,21 +10,23 @@ pub use draw::*;
 mod sudoku;
 pub use sudoku::*;
 
-#[cfg(test)]
-mod tst;
+mod dpll;
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
+use crate::dpll::run_dpll;
+
+type Assignment = BTreeMap<Var, bool>;
 
 #[derive(Debug, PartialEq, Eq)]
 enum Outcome {
-    Sat,
+    Sat(Assignment),
     Unsat,
 }
 
 pub type Var = Id;
 pub type Literal = (Var, bool);
 pub type Clause = BTreeSet<Literal>;
-pub type ClauseSet = BTreeSet<Clause>;
+pub type KnowledgeBase = BTreeSet<Clause>;
 
 fn main() {
     let s = "
@@ -42,5 +44,9 @@ fn main() {
 
     ";
     let s = parse_sudoku(s);
-    let a = sudoku_to_clauseset(&s);
+    let a = sudoku_to_knowledge_base(&s);
+    let outcome = run_dpll(&a);
+    dbg!(outcome);
 }
+
+fn negate_literal((v, b): Literal) -> Literal { (v, !b) }

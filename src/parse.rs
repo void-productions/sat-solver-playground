@@ -1,7 +1,7 @@
 use crate::*;
 
 // syntax: (X | ~X) & (Y)
-pub fn parse(s: &str) -> ClauseSet {
+pub fn parse(s: &str) -> KnowledgeBase {
     let mut s = s.to_string();
     loop {
         let n = s.len();

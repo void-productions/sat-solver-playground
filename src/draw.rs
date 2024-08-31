@@ -25,7 +25,7 @@ impl Draw for Clause {
     }
 }
 
-impl Draw for ClauseSet {
+impl Draw for KnowledgeBase {
     fn draw(&self) -> String {
         let v: Vec<_> = self.iter().map(|x| x.draw()).collect();
         v.join("&")

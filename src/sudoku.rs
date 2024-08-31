@@ -28,7 +28,7 @@ pub fn parse_sudoku(s: &str) -> Sudoku {
 }
 
 // exactly one of these variables should be true.
-fn push_one_of(vars: Vec<Var>, c: &mut ClauseSet, exactly: bool) {
+fn push_one_of(vars: Vec<Var>, c: &mut KnowledgeBase, exactly: bool) {
     let disj = vars.iter().map(|x| (*x, true)).collect();
     c.insert(disj);
 
@@ -77,8 +77,8 @@ fn index_sets() -> Vec<BTreeSet<(u8, u8)>> {
     out
 }
 
-fn base_clauseset() -> ClauseSet {
-    let mut c = ClauseSet::new();
+fn base_clauseset() -> KnowledgeBase {
+    let mut c = KnowledgeBase::new();
 
     // each cell contains exactly one value.
     for x in 1..=9 {
@@ -112,7 +112,7 @@ fn idx(x: u8, y: u8) -> usize {
     x + y*9
 }
 
-pub fn sudoku_to_clauseset(s: &Sudoku) -> ClauseSet {
+pub fn sudoku_to_knowledge_base(s: &Sudoku) -> KnowledgeBase {
     let mut a = base_clauseset();
     for x in 1..=9 {
         for y in 1..=9 {
