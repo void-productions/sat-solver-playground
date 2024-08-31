@@ -1,4 +1,5 @@
 use crate::{negate_literal, Assignment, KnowledgeBase, Literal, Outcome};
+use crate::draw::Draw;
 
 pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
     let (knowledge_base, simplify_assignment) = simplify(knowledge_base);
@@ -13,6 +14,7 @@ pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
     }
 
     let decision = get_decision(&knowledge_base);
+    println!("{}", decision.draw());
     if let Outcome::Sat(mut assignment) = recurse_dpll(&knowledge_base, decision) {
         assignment.extend(simplify_assignment);
         return Outcome::Sat(assignment);
