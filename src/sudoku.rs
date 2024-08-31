@@ -34,8 +34,12 @@ pub fn print_sudoku(s: &Sudoku) {
     for chunk in s.chunks(9) {
         for f in chunk {
             match f {
-                Field::Num(n) => { print!("{n}"); }
-                Field::Empty => { print!("-") }
+                Field::Num(n) => {
+                    print!("{n}");
+                }
+                Field::Empty => {
+                    print!("-")
+                }
             }
         }
         println!("");
@@ -148,7 +152,7 @@ pub fn assigment_to_sudoku(assigment: &Assignment) -> Sudoku {
     for (&var, &b) in assigment.iter().filter(|v| *v.1) {
         let s = (var, b).draw();
         let (x, y, n) = parse_variable(&s);
-        fields[x-1 + (y-1) * 9] = Field::Num(n as u8);
+        fields[x - 1 + (y - 1) * 9] = Field::Num(n as u8);
     }
     fields
 }
@@ -156,9 +160,9 @@ pub fn assigment_to_sudoku(assigment: &Assignment) -> Sudoku {
 fn parse_variable(input: &str) -> (usize, usize, usize) {
     // Remove the leading character and collect the remaining characters
     let digits: Vec<usize> = input[1..]
-        .chars()  // Convert string slice to an iterator of characters
-        .map(|c| c.to_digit(10).expect("Expected a digit") as usize)  // Convert each character to a digit
-        .collect();  // Collect the results into a vector
+        .chars() // Convert string slice to an iterator of characters
+        .map(|c| c.to_digit(10).expect("Expected a digit") as usize) // Convert each character to a digit
+        .collect(); // Collect the results into a vector
 
     // Ensure the vector contains exactly three elements and return them as a tuple
     (digits[0], digits[1], digits[2])

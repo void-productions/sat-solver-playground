@@ -1,5 +1,6 @@
-use crate::{negate_literal, Assignment, KnowledgeBase, Literal, Outcome};
 use crate::draw::Draw;
+use crate::heuristics::get_decision;
+use crate::{negate_literal, Assignment, KnowledgeBase, Literal, Outcome};
 
 pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
     let (knowledge_base, simplify_assignment) = simplify(knowledge_base);
@@ -34,10 +35,6 @@ fn recurse_dpll(knowledge_base: &KnowledgeBase, decision: Literal) -> Outcome {
         return Outcome::Sat(assignment);
     }
     Outcome::Unsat
-}
-
-fn get_decision(knowledge_base: &KnowledgeBase) -> Literal {
-    *knowledge_base.first().unwrap().first().unwrap()
 }
 
 fn apply_decision(mut knowledge_base: KnowledgeBase, decision: Literal) -> KnowledgeBase {

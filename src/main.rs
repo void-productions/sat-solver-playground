@@ -15,6 +15,7 @@ pub use sudoku::*;
 mod dpll;
 use dpll::run_dpll;
 
+mod heuristics;
 #[cfg(test)]
 mod tst;
 
@@ -44,7 +45,6 @@ fn main() {
             println!("Unsatisfied");
         }
     }
-
 }
 
 fn negate_literal((v, b): Literal) -> Literal {
