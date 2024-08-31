@@ -1,3 +1,5 @@
+use std::collections::{BTreeMap, BTreeSet};
+
 mod parse;
 pub use parse::*;
 
@@ -11,12 +13,10 @@ mod sudoku;
 pub use sudoku::*;
 
 mod dpll;
+use dpll::run_dpll;
 
 #[cfg(test)]
 mod tst;
-
-use std::collections::{BTreeMap, BTreeSet};
-use crate::dpll::run_dpll;
 
 type Assignment = BTreeMap<Var, bool>;
 
@@ -29,7 +29,7 @@ enum Outcome {
 pub type Var = Id;
 pub type Literal = (Var, bool);
 pub type Clause = BTreeSet<Literal>;
-pub type KnowledgeBase = BTreeSet<Clause>;
+pub type KnowledgeBase = Vec<Clause>;
 
 fn main() {
     let s = "
@@ -48,8 +48,10 @@ fn main() {
     ";
     let s = parse_sudoku(s);
     let a = sudoku_to_knowledge_base(&s);
-    let outcome = run_dpll(&a);
+    let outcome = run_dpll(a);
     dbg!(outcome);
 }
 
-fn negate_literal((v, b): Literal) -> Literal { (v, !b) }
+fn negate_literal((v, b): Literal) -> Literal {
+    (v, !b)
+}

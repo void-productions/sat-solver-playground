@@ -2,12 +2,12 @@ use crate::*;
 
 fn should_sat(s: &str) {
     let a = parse(s);
-    assert!(matches!(run_dpll(&a), Outcome::Sat(_)));
+    assert!(matches!(run_dpll(a), Outcome::Sat(_)));
 }
 
 fn should_unsat(s: &str) {
     let a = parse(s);
-    assert!(matches!(run_dpll(&a), Outcome::Unsat));
+    assert!(matches!(run_dpll(a), Outcome::Unsat));
 }
 
 #[test]

@@ -7,21 +7,26 @@ pub fn parse(s: &str) -> KnowledgeBase {
         let n = s.len();
         s = s.replace("\n", "");
         s = s.replace(" ", "");
-        if n == s.len() { break; }
+        if n == s.len() {
+            break;
+        }
     }
     let mut s = &*s;
 
-    let mut out = BTreeSet::new();
+    let mut out = KnowledgeBase::new();
     loop {
-        if s.len() == 0 { break; }
+        if s.len() == 0 {
+            break;
+        }
         let (c, s2) = parse_clause(&s);
-        out.insert(c);
-        if s2.len() == 0 { break; }
+        out.push(c);
+        if s2.len() == 0 {
+            break;
+        }
         assert!(s2.chars().next().unwrap() == '&');
         s = &s2[1..];
     }
     out
-    
 }
 
 fn parse_clause<'s>(s: &'s str) -> (Clause, &'s str) {

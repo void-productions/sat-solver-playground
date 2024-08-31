@@ -1,6 +1,8 @@
 use crate::{negate_literal, Assignment, KnowledgeBase, Literal, Outcome};
 
-pub fn run_dpll(knowledge_base: &KnowledgeBase) -> Outcome {
+pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
+    let knowledge_base = simplify(knowledge_base);
+
     // check satisfied
     if knowledge_base.is_empty() {
         return Outcome::Sat(Assignment::new());
@@ -10,21 +12,21 @@ pub fn run_dpll(knowledge_base: &KnowledgeBase) -> Outcome {
         return Outcome::Unsat;
     }
 
-    let decision = get_decision(knowledge_base);
-    if let Some(outcome) = recurse_dpll(knowledge_base, decision) {
+    let decision = get_decision(&knowledge_base);
+    if let Some(outcome) = recurse_dpll(&knowledge_base, decision) {
         return outcome;
     }
     let negated_decision = negate_literal(decision);
-    if let Some(outcome) = recurse_dpll(knowledge_base, negated_decision) {
+    if let Some(outcome) = recurse_dpll(&knowledge_base, negated_decision) {
         return outcome;
     }
     Outcome::Unsat
 }
 
-fn recurse_dpll(knowledge_base: &KnowledgeBase, negated_decision: Literal) -> Option<Outcome> {
-    let new_knowledge_base = apply_decision(knowledge_base, negated_decision);
-    if let Outcome::Sat(mut assignment) = run_dpll(&new_knowledge_base) {
-        assignment.insert(negated_decision.0, negated_decision.1);
+fn recurse_dpll(knowledge_base: &KnowledgeBase, decision: Literal) -> Option<Outcome> {
+    let new_knowledge_base = apply_decision(knowledge_base.clone(), decision);
+    if let Outcome::Sat(mut assignment) = run_dpll(new_knowledge_base) {
+        assignment.insert(decision.0, decision.1);
         return Some(Outcome::Sat(assignment));
     }
     None
@@ -34,17 +36,33 @@ fn get_decision(knowledge_base: &KnowledgeBase) -> Literal {
     *knowledge_base.iter().next().unwrap().iter().next().unwrap()
 }
 
-fn apply_decision(knowledge_base: &KnowledgeBase, decision: Literal) -> KnowledgeBase {
-    let mut new_base = KnowledgeBase::new();
-    let negated_decision = &&negate_literal(decision);
-    for clause in knowledge_base {
-        if !clause.contains(&decision) {
-            let new_clause = clause.iter()
-                                   .filter(|l| l != negated_decision)
-                                   .cloned()
-                                   .collect();
-            new_base.insert(new_clause);
+fn apply_decision(mut knowledge_base: KnowledgeBase, decision: Literal) -> KnowledgeBase {
+    let negated_decision = &negate_literal(decision);
+    knowledge_base.retain(|c| !c.contains(&decision));
+
+    for clause in &mut knowledge_base {
+        clause.retain(|l| l != negated_decision);
+    }
+
+    knowledge_base
+}
+
+fn simplify(mut knowledge_base: KnowledgeBase) -> KnowledgeBase {
+    loop {
+        let decisions: Vec<_> = knowledge_base
+            .iter()
+            .filter(|c| c.len() == 1)
+            .map(|c| *c.iter().next().unwrap())
+            .collect();
+
+        if decisions.is_empty() {
+            break;
+        }
+
+        for decision in decisions {
+            knowledge_base = apply_decision(knowledge_base, decision);
         }
     }
-    new_base
+
+    knowledge_base
 }

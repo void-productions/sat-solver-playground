@@ -15,22 +15,24 @@ pub fn parse_sudoku(s: &str) -> Sudoku {
         s = s.replace("\n", "");
         s = s.replace(" ", "");
         s = s.replace("\t", "");
-        if n == s.len() { break; }
+        if n == s.len() {
+            break;
+        }
     }
 
-    s.chars().map(|ch| {
-        match ch {
+    s.chars()
+        .map(|ch| match ch {
             '0'..='9' => Field::Num(ch as u8 - '0' as u8),
             '-' => Field::Empty,
             _ => panic!(),
-        }
-    }).collect()
+        })
+        .collect()
 }
 
 // exactly one of these variables should be true.
 fn push_one_of(vars: Vec<Var>, c: &mut KnowledgeBase, exactly: bool) {
     let disj = vars.iter().map(|x| (*x, true)).collect();
-    c.insert(disj);
+    c.push(disj);
 
     if exactly {
         for x in &vars {
@@ -39,7 +41,7 @@ fn push_one_of(vars: Vec<Var>, c: &mut KnowledgeBase, exactly: bool) {
                     let mut clause = Clause::new();
                     clause.insert((*x, false));
                     clause.insert((*y, false));
-                    c.insert(clause);
+                    c.push(clause);
                 }
             }
         }
@@ -67,7 +69,7 @@ fn index_sets() -> Vec<BTreeSet<(u8, u8)>> {
             let mut inner = BTreeSet::new();
             for x in 0..3 {
                 for y in 0..3 {
-                    inner.insert((x_+x, y_+y));
+                    inner.insert((x_ + x, y_ + y));
                 }
             }
             out.push(inner);
@@ -109,7 +111,7 @@ fn var(x: u8, y: u8, val: u8) -> Id {
 fn idx(x: u8, y: u8) -> usize {
     let x = x as usize - 1;
     let y = y as usize - 1;
-    x + y*9
+    x + y * 9
 }
 
 pub fn sudoku_to_knowledge_base(s: &Sudoku) -> KnowledgeBase {
@@ -120,7 +122,7 @@ pub fn sudoku_to_knowledge_base(s: &Sudoku) -> KnowledgeBase {
                 let lit = (var(x, y, n), true);
                 let mut clause = Clause::default();
                 clause.insert(lit);
-                a.insert(clause);
+                a.push(clause);
             }
         }
     }
