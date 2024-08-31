@@ -37,7 +37,7 @@ fn recurse_dpll(knowledge_base: &KnowledgeBase, decision: Literal) -> Outcome {
 }
 
 fn get_decision(knowledge_base: &KnowledgeBase) -> Literal {
-    *knowledge_base.iter().next().unwrap().iter().next().unwrap()
+    *knowledge_base.first().unwrap().first().unwrap()
 }
 
 fn apply_decision(mut knowledge_base: KnowledgeBase, decision: Literal) -> KnowledgeBase {
