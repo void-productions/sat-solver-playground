@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 mod parse;
 pub use parse::*;
@@ -15,28 +15,20 @@ pub use sudoku::*;
 mod dpll;
 use dpll::run_dpll;
 
+mod knowledge_base;
+use crate::knowledge_base::{Literal, Outcome};
+
 mod heuristics;
+
 #[cfg(test)]
 mod tst;
-
-type Assignment = BTreeMap<Var, bool>;
-
-#[derive(Debug, PartialEq, Eq)]
-enum Outcome {
-    Sat(Assignment),
-    Unsat,
-}
-
-pub type Var = Id;
-pub type Literal = (Var, bool);
-pub type Clause = BTreeSet<Literal>;
-pub type KnowledgeBase = Vec<Clause>;
 
 fn main() {
     let example = get_example();
     let s = parse_sudoku(example);
     print_sudoku(&s);
     let a = sudoku_to_knowledge_base(&s);
+    println!("knowledge base: {a}");
     match run_dpll(a) {
         Outcome::Sat(ass) => {
             print_sudoku(&assigment_to_sudoku(&ass));

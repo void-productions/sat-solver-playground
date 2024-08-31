@@ -1,6 +1,7 @@
 use crate::draw::Draw;
 use crate::heuristics::get_decision;
-use crate::{negate_literal, Assignment, KnowledgeBase, Literal, Outcome};
+use crate::{negate_literal, Literal, Outcome};
+use crate::knowledge_base::{Assignment, KnowledgeBase};
 
 pub fn run_dpll(knowledge_base: KnowledgeBase) -> Outcome {
     let (knowledge_base, simplify_assignment) = simplify(knowledge_base);

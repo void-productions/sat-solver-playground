@@ -1,4 +1,5 @@
 use crate::*;
+use crate::knowledge_base::{Assignment, Clause, KnowledgeBase, Var};
 
 // sudoku[x][y]
 pub type Sudoku = Vec<Field>;

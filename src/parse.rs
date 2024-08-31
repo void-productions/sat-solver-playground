@@ -1,4 +1,5 @@
 use crate::*;
+use crate::knowledge_base::{Clause, KnowledgeBase};
 
 // syntax: (X | ~X) & (Y)
 pub fn parse(s: &str) -> KnowledgeBase {
