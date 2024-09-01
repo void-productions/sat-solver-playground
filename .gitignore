@@ -1,3 +1,6 @@
 /.idea
+/python/.idea
 /target
 /data
+
+__pycache__
