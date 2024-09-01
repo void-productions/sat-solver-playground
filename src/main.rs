@@ -31,7 +31,7 @@ pub use examples::*;
 mod tst;
 
 fn main() {
-    let example = get_example("extreme");
+    let example = get_example("hard");
     let s = parse_sudoku(example);
     print_sudoku(&s);
     let a = sudoku_to_knowledge_base(&s);
