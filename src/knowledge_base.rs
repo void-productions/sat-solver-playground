@@ -1,5 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
-
+use std::fs::File;
+use serde::Serialize;
+use serde_json::json;
 use crate::*;
 
 pub type Assignment = BTreeMap<Var, bool>;
@@ -25,6 +27,30 @@ pub fn dedup_knowledge_base(knowledge_base: KnowledgeBase) -> KnowledgeBase {
         }
     }
     deduped_base
+}
+
+#[derive(Serialize)]
+struct Pair(usize, bool);
+
+pub fn knowledge_base_to_json(base: &KnowledgeBase) -> serde_json::Value {
+    // Convert each BTreeSet of tuples to a BTreeSet of Pairs
+    let json_vec: Vec<Vec<Pair>> = base
+        .into_iter()
+        .map(|set| set.into_iter().map(|(a, b)| Pair(a.0, *b)).collect())
+        .collect();
+
+    // Convert to JSON value
+    json!(json_vec)
+}
+
+pub fn dump_json_to_file(json_value: &serde_json::Value, file_path: &str) -> std::io::Result<()> {
+    // Open a file in write-only mode, create it if it doesn't exist
+    let file = File::create(file_path)?;
+
+    // Write the JSON value to the file using pretty format
+    serde_json::to_writer_pretty(file, json_value)?;
+
+    Ok(())
 }
 
 pub fn negate_literal((v, b): Literal) -> Literal {

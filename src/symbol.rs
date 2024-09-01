@@ -15,7 +15,7 @@ pub fn gsymb_get(x: Id) -> String {
 }
 
 #[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug)]
-pub struct Id(usize);
+pub struct Id(pub usize);
 
 // implementation of symbol map.
 
