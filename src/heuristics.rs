@@ -5,7 +5,7 @@ use crate::*;
 
 type Heuristic = fn(knowledge_base: &KnowledgeBase, l: Literal) -> f32;
 
-pub const USED_HEURISTIC: Heuristic = simplified;
+pub const USED_HEURISTIC: Heuristic = reduce_terms;
 
 pub fn baseline(knowledge_base: &KnowledgeBase, l: Literal) -> f32 {
     let l_neg = negate_literal(l);
@@ -35,6 +35,15 @@ pub fn simplified(knowledge_base: &KnowledgeBase, l: Literal) -> f32 {
     state.apply_decision(l);
     state.simplify();
     state.knowledge_base.len() as f32 * -1.0
+}
+
+pub fn reduce_clauses(knowledge_base: &KnowledgeBase, l: Literal) -> f32 {
+    knowledge_base.iter().filter(|c| c.contains(&l)).count() as f32 * -1.0
+}
+
+pub fn reduce_terms(knowledge_base: &KnowledgeBase, l: Literal) -> f32 {
+    let neg_l = negate_literal(l);
+    knowledge_base.iter().filter(|c| c.contains(&neg_l)).count() as f32 * -1.0
 }
 
 pub fn get_decision(knowledge_base: &KnowledgeBase) -> Literal {
