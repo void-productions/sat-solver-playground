@@ -14,7 +14,7 @@ pub fn gsymb_get(x: Id) -> String {
     g.get(x).to_string()
 }
 
-#[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug, Hash)]
 pub struct Id(pub usize);
 
 // implementation of symbol map.
