@@ -3,7 +3,7 @@ use crate::*;
 mod stack_map;
 pub use stack_map::*;
 
-pub fn cdcl(k: KnowledgeBase) -> Outcome {
+pub fn run_cdcl(k: KnowledgeBase) -> Outcome {
     let open = k.into_iter().map(|x| (x, BTreeSet::new())).collect();
     Cdcl {
         open,
@@ -44,6 +44,7 @@ impl Cdcl {
                 if !self.backtrack(&clause.clone()) {
                     return Outcome::Unsat;
                 }
+                continue;
             }
 
             let lit = self.get_decision();

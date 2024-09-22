@@ -43,7 +43,7 @@ fn main() -> std::io::Result<()> {
     let knowledge_base_json = knowledge_base_to_json(&a);
     dump_json_to_file(&knowledge_base_json, "data/knowledge_base.json")?;
     // println!("knowledge base:\n{}", a.draw());
-    match run_dpll(a) {
+    match run_cdcl(a) {
         Outcome::Sat(ass) => {
             print_sudoku(&assigment_to_sudoku(&ass));
         }
