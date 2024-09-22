@@ -23,4 +23,8 @@ impl<K: Eq + Hash, V> StackMap<K, V> {
     pub fn push(&mut self, k: K, v: V) {
         todo!()
     }
+
+    pub fn iter(&self) -> impl Iterator<Item=&(K, V)> {
+        self.stack.iter()
+    }
 }
