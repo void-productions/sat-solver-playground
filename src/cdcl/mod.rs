@@ -80,6 +80,7 @@ impl Cdcl {
         }
     }
 
+    #[track_caller]
     pub fn inv(&self) {
         for c in &self.satisfied {
             assert!(self.sat_clause(&c));
