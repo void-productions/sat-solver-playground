@@ -19,7 +19,7 @@ pub fn run_cdcl(k: KnowledgeBase) -> Outcome {
 }
 
 #[derive(Clone)]
-enum Cause {
+pub enum Cause {
     Branch,
 
     // Law of excluded middle: we tried the opposite and it failed.
@@ -55,7 +55,7 @@ impl Cdcl {
             }
 
             let lit = self.get_decision();
-            self.cause_stack.push(lit.0, (lit.1, Cause::Branch));
+            self.apply_decision(lit, Cause::Branch);
         }
     }
 
