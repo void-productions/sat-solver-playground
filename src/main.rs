@@ -40,16 +40,9 @@ fn main() -> std::io::Result<()> {
     print_sudoku(&s);
     let a = sudoku_to_knowledge_base(&s);
     let a = dedup_knowledge_base(a);
-    let mut state = State {
-        knowledge_base: a,
-        assignment: Assignment::new(),
-    };
-    state.simplify();
-    let knowledge_base_json = knowledge_base_to_json(&state.knowledge_base);
-    // dump_json_to_file(&knowledge_base_json, "data/knowledge_base.json")?;
 
     let run = |algo: fn(KnowledgeBase) -> Outcome| {
-        match algo(state.knowledge_base.clone()) {
+        match algo(a.clone()) {
             Outcome::Sat(ass) => {
                 print_sudoku(&assigment_to_sudoku(&ass));
             }

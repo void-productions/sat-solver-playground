@@ -58,6 +58,7 @@ impl Cdcl {
         }
     }
 
+    #[allow(unused)]
     fn dump_stack(&self) {
         for (var, (b, cause)) in self.cause_stack.iter() {
             println!("----------");
