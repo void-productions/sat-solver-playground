@@ -62,7 +62,7 @@ impl State {
         }
 
         let decision = get_decision(&self.knowledge_base);
-        println!("{}", decision.draw());
+        // println!("{}", decision.draw());
         DECISION_COUNTER.fetch_add(1, Ordering::AcqRel);
 
         let mut clone = self.clone();

@@ -46,16 +46,22 @@ fn main() -> std::io::Result<()> {
     };
     state.simplify();
     let knowledge_base_json = knowledge_base_to_json(&state.knowledge_base);
-    dump_json_to_file(&knowledge_base_json, "data/knowledge_base.json")?;
-    // println!("knowledge base:\n{}", a.draw());
-    match run_dpll(state.knowledge_base) {
-        Outcome::Sat(ass) => {
-            print_sudoku(&assigment_to_sudoku(&ass));
-        }
-        Outcome::Unsat => {
-            println!("Unsatisfied");
-        }
-    }
+    // dump_json_to_file(&knowledge_base_json, "data/knowledge_base.json")?;
+
+    let run = |algo: fn(KnowledgeBase) -> Outcome| {
+        match algo(state.knowledge_base.clone()) {
+            Outcome::Sat(ass) => {
+                print_sudoku(&assigment_to_sudoku(&ass));
+            }
+            Outcome::Unsat => {
+                println!("Unsatisfied");
+            }
+        };
+    };
+
+    run(run_dpll);
+    run(run_cdcl);
+
     println!(
         "num decisions: {}",
         DECISION_COUNTER.load(Ordering::Relaxed)
