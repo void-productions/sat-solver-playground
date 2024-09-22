@@ -39,6 +39,7 @@ impl Cdcl {
     fn cdcl(mut self) -> Outcome {
         loop {
             self.simplify();
+            self.dump_stack();
 
             // check satisfied:
             if self.open.is_empty() {
@@ -55,6 +56,27 @@ impl Cdcl {
 
             let lit = self.get_decision();
             self.apply_decision(lit, Cause::Branch);
+        }
+    }
+
+    fn dump_stack(&self) {
+        for (var, (b, cause)) in self.cause_stack.iter() {
+            println!("----------");
+            println!("-STACK:-");
+            println!("----------");
+            let var = gsymb_get(*var);
+            let lit: String = if *b {
+                format!("{var}")
+            } else {
+                format!("~{var}")
+            };
+            let s: String = match cause {
+                Cause::Lem => "lem".to_string(),
+                Cause::Branch => "branch".to_string(),
+                Cause::Unit(c) => format!("unit({:?})", c),
+            };
+            println!("{} - {}", lit, s);
+            println!("----------");
         }
     }
 
