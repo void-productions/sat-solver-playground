@@ -80,6 +80,28 @@ impl Cdcl {
         }
     }
 
+    pub fn inv(&self) {
+        for c in &self.satisfied {
+            assert!(self.sat_clause(&c));
+        }
+
+        for (x, y) in &self.open {
+            let combined = x | y;
+            assert!(!self.sat_clause(&combined));
+
+            for z in x { assert!(self.get(z.0).is_none()); }
+            for z in y { assert!(self.get(z.0) == Some(!z.1)); }
+        }
+    }
+
+    fn sat_lit(&self, lit: Literal) -> bool {
+        self.get(lit.0) == Some(lit.1)
+    }
+
+    fn sat_clause(&self, c: &Clause) -> bool {
+        c.iter().any(|lit| self.sat_lit(*lit))
+    }
+
     fn current_assignment(&self) -> Assignment {
         self.cause_stack.iter()
                          .map(|(v, (b, _))| (*v, *b))
