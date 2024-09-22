@@ -106,6 +106,16 @@ impl Cdcl {
         out
     }
 
+    fn add_clause(&mut self, c: Clause) {
+        if self.sat_clause(&c) {
+            self.satisfied.push(c);
+        } else {
+            let rest = c.iter().filter(|lit| self.sat_lit(negate_literal(**lit))).cloned().collect();
+            let open = &c - &rest;
+            self.open.push((open, rest));
+        }
+    }
+
     fn sat_lit(&self, lit: Literal) -> bool {
         self.get(lit.0) == Some(lit.1)
     }

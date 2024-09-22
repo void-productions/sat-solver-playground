@@ -31,17 +31,12 @@ impl Cdcl {
 
     // re-open clauses that were closed in a previous branch.
     fn unsimplify(&mut self) {
-        for (x, y) in self.open.iter_mut() {
-            for z in y.clone() {
-                if self.cause_stack.get(&z.0).is_none() {
-                    y.remove(&z);
-                    x.insert(z);
-                }
-            }
-        }
-
-        // TODO make better.
-        self.open.extend(self.satisfied.iter().map(|x| (x.clone(), Default::default())));
+        let cs = self.all_clauses();
+        self.open = Default::default();
         self.satisfied = Default::default();
+
+        for c in cs {
+            self.add_clause(c);
+        }
     }
 }
