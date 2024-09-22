@@ -39,7 +39,6 @@ impl Cdcl {
     fn cdcl(mut self) -> Outcome {
         loop {
             self.simplify();
-            self.dump_stack();
 
             // check satisfied:
             if self.open.is_empty() {
