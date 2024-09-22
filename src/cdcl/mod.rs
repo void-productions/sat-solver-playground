@@ -3,6 +3,12 @@ use crate::*;
 mod stack_map;
 pub use stack_map::*;
 
+mod simplify;
+pub use simplify::*;
+
+mod backtrack;
+pub use backtrack::*;
+
 pub fn run_cdcl(k: KnowledgeBase) -> Outcome {
     let open = k.into_iter().map(|x| (x, BTreeSet::new())).collect();
     Cdcl {
@@ -53,25 +59,10 @@ impl Cdcl {
         }
     }
 
-    // clause is not satified by the current assignment. Let's pop() the stack until it could be satisfied again.
-    // do self.cause_stack.pop() until one of the branch vars was popped.
-    // Returns whether we should continue.
-    fn backtrack(&mut self, clause: &Clause) -> bool {
-        loop {
-            let (v, (b, cause)) = self.cause_stack.pop().unwrap();
-            
-        }
-        true
-    }
-
     fn current_assignment(&self) -> Assignment {
         self.cause_stack.iter()
                          .map(|(v, (b, _))| (*v, *b))
                          .collect()
-    }
-
-    fn simplify(&mut self) {
-        todo!()
     }
 
     fn get_decision(&self) -> Literal {
