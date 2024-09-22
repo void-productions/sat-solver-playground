@@ -9,18 +9,19 @@ impl Cdcl {
                                      .cloned()
                                      .collect();
 
-            if v.is_empty() { return; }
-
+            let mut changed = false;
             for (x, y) in v {
                 let x = *x.iter().next().unwrap();
 
                 // if it already got a value, don't overwrite it.
                 if self.get(x.0).is_none() {
+                    changed = true;
                     let mut combined = y.clone();
                     combined.insert(x);
                     self.apply_decision(x, Cause::Unit(combined));
                 }
             }
+            if !changed { break; }
         }
     }
 
