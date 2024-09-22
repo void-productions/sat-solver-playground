@@ -25,8 +25,8 @@ pub enum Cause {
     // Law of excluded middle: we tried the opposite and it failed.
     Lem,
 
-    // There is a clause containing the proven Literal and this previously proven rest.
-    Unit(/*rest*/ Clause)
+    // We derived this literal by unit propagation of this clause.
+    Unit(Clause)
 }
 
 pub struct Cdcl {

@@ -16,7 +16,9 @@ impl Cdcl {
 
                 // if it already got a value, don't overwrite it.
                 if self.get(x.0).is_none() {
-                    self.apply_decision(x, Cause::Unit(y));
+                    let mut combined = y.clone();
+                    combined.insert(x);
+                    self.apply_decision(x, Cause::Unit(combined));
                 }
             }
         }
