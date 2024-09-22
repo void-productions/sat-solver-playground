@@ -25,9 +25,8 @@ pub enum Cause {
     // Law of excluded middle: we tried the opposite and it failed.
     Lem,
 
-    // contains the assumed Literals, which made this clause a unit clause.
-    // The negations of these literals were contained in the original clause.
-    UnitClause(Vec<Literal>)
+    // There is a clause containing the proven Literal and this previously proven rest.
+    Unit(/*rest*/ Clause)
 }
 
 pub struct Cdcl {
@@ -69,5 +68,9 @@ impl Cdcl {
         let clause = &self.open.iter().next().unwrap().0;
         let out = *clause.iter().next().unwrap();
         out
+    }
+
+    fn get(&self, v: Var) -> Option<bool> {
+        self.cause_stack.get(&v).map(|(x, _)| *x)
     }
 }

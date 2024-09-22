@@ -25,8 +25,8 @@ impl<K: Eq + Hash + Clone, V: Clone> StackMap<K, V> {
         self.map.insert(k, v);
     }
 
-    pub fn get(&self, k: &K) -> &V {
-        self.map.get(k).unwrap()
+    pub fn get(&self, k: &K) -> Option<&V> {
+        self.map.get(k)
     }
 
     pub fn iter(&self) -> impl Iterator<Item=&(K, V)> {
