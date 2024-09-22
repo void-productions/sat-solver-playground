@@ -54,7 +54,7 @@ impl Cdcl {
                 continue;
             }
 
-            let lit = self.get_decision();
+            let lit = get_decision(&self.open_clauses());
             self.apply_decision(lit, Cause::Branch);
         }
     }
@@ -95,6 +95,10 @@ impl Cdcl {
         }
     }
 
+    fn open_clauses(&self) -> KnowledgeBase {
+        self.open.iter().map(|(x, _)| x).cloned().collect()
+    }
+
     fn all_clauses(&self) -> Vec<Clause> {
         let mut out: Vec<Clause> = Vec::new();
         out.extend(self.satisfied.iter().cloned());
@@ -128,12 +132,6 @@ impl Cdcl {
         self.cause_stack.iter()
                          .map(|(v, (b, _))| (*v, *b))
                          .collect()
-    }
-
-    fn get_decision(&self) -> Literal {
-        let clause = &self.open.iter().next().unwrap().0;
-        let out = *clause.iter().next().unwrap();
-        out
     }
 
     fn get(&self, v: Var) -> Option<bool> {
