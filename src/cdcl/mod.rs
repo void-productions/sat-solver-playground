@@ -12,6 +12,7 @@ pub fn run_cdcl(k: KnowledgeBase) -> Outcome {
     }.cdcl()
 }
 
+#[derive(Clone)]
 enum Cause {
     Branch,
 

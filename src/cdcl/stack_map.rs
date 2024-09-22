@@ -1,12 +1,12 @@
 use crate::*;
 
 // behaves like a stack, but also a map.
-pub struct StackMap<K: Eq + Hash, V> {
+pub struct StackMap<K: Eq + Hash + Clone, V: Clone> {
     stack: Vec<(K, V)>,
     map: HashMap<K, V>,
 }
 
-impl<K: Eq + Hash, V> StackMap<K, V> {
+impl<K: Eq + Hash + Clone, V: Clone> StackMap<K, V> {
     pub fn new() -> Self {
         Self {
             stack: Default::default(),
@@ -21,7 +21,12 @@ impl<K: Eq + Hash, V> StackMap<K, V> {
     }
 
     pub fn push(&mut self, k: K, v: V) {
-        todo!()
+        self.stack.push((k.clone(), v.clone()));
+        self.map.insert(k, v);
+    }
+
+    pub fn get(&self, k: &K) -> &V {
+        self.map.get(k).unwrap()
     }
 
     pub fn iter(&self) -> impl Iterator<Item=&(K, V)> {
