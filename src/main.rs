@@ -1,7 +1,8 @@
 #![allow(unused_imports)]
 
-use std::collections::BTreeSet;
+use std::collections::{HashMap, BTreeSet};
 use std::sync::atomic::Ordering;
+use std::hash::Hash;
 
 mod parse;
 pub use parse::*;
@@ -17,6 +18,9 @@ pub use sudoku::*;
 
 mod dpll;
 pub use dpll::*;
+
+mod cdcl;
+pub use cdcl::*;
 
 mod knowledge_base;
 pub use knowledge_base::*;
