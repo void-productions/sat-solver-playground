@@ -1,8 +1,25 @@
 use crate::*;
 
 impl Cdcl {
+    // optionally returns an unsatisfiable clause.
     pub fn simplify(&mut self) {
-        todo!()
+        loop {
+            let v: Vec<_> = self.open.iter()
+                                     .filter(|(x, _)| x.len() == 1)
+                                     .cloned()
+                                     .collect();
+
+            if v.is_empty() { return; }
+
+            for (x, y) in v {
+                let x = *x.iter().next().unwrap();
+
+                // if it already got a value, don't overwrite it.
+                if self.get(x.0).is_none() {
+                    self.apply_decision(x, Cause::Unit(y));
+                }
+            }
+        }
     }
 
     // applies the decision both in the assignment, and the knowledge base.
@@ -19,6 +36,7 @@ impl Cdcl {
 
             if x.contains(&neg) {
                 x.remove(&neg);
+                y.insert(neg);
             }
 
             true
