@@ -41,7 +41,7 @@ fn main() -> std::io::Result<()> {
     let a = sudoku_to_knowledge_base(&s);
     let a = dedup_knowledge_base(a);
     let knowledge_base_json = knowledge_base_to_json(&a);
-    dump_json_to_file(&knowledge_base_json, "data/knowledge_base.json")?;
+    // dump_json_to_file(&knowledge_base_json, "data/knowledge_base.json")?;
     // println!("knowledge base:\n{}", a.draw());
     match run_cdcl(a) {
         Outcome::Sat(ass) => {
