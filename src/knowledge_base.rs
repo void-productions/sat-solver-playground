@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fs::File;
 use serde::Serialize;
 use serde_json::json;
@@ -32,6 +32,12 @@ pub fn dedup_knowledge_base(knowledge_base: KnowledgeBase) -> KnowledgeBase {
 #[derive(Serialize)]
 struct Pair(usize, bool);
 
+#[derive(Serialize)]
+struct KnowledgeBaseDump {
+    knowledge_base: Vec<Vec<Pair>>,
+    mapping: Vec<(String, Id)>
+}
+
 pub fn knowledge_base_to_json(base: &KnowledgeBase) -> serde_json::Value {
     // Convert each BTreeSet of tuples to a BTreeSet of Pairs
     let json_vec: Vec<Vec<Pair>> = base
@@ -39,8 +45,15 @@ pub fn knowledge_base_to_json(base: &KnowledgeBase) -> serde_json::Value {
         .map(|set| set.into_iter().map(|(a, b)| Pair(a.0, *b)).collect())
         .collect();
 
+    let mapping = symbol::get_gsymb_iter();
+
+    let result: KnowledgeBaseDump = KnowledgeBaseDump {
+        knowledge_base: json_vec,
+        mapping,
+    };
+
     // Convert to JSON value
-    json!(json_vec)
+    json!(result)
 }
 
 pub fn dump_json_to_file(json_value: &serde_json::Value, file_path: &str) -> std::io::Result<()> {

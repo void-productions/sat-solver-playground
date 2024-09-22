@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::sync::*;
+use serde::Serialize;
 
 // global symbol map.
 static GSYMB: LazyLock<Mutex<SymbolMap>> = LazyLock::new(|| Mutex::from(SymbolMap::new()));
@@ -14,7 +15,15 @@ pub fn gsymb_get(x: Id) -> String {
     g.get(x).to_string()
 }
 
-#[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug)]
+pub fn get_gsymb_iter() -> Vec<(String, Id)> {
+    let g = GSYMB.lock().unwrap();
+    g.string_to_id
+        .iter()
+        .map(|(k, v)| (k.clone(), v.clone()))
+        .collect()
+}
+
+#[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug, Serialize)]
 pub struct Id(pub usize);
 
 // implementation of symbol map.
