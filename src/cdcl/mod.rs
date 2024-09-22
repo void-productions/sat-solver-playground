@@ -95,6 +95,17 @@ impl Cdcl {
         }
     }
 
+    fn all_clauses(&self) -> Vec<Clause> {
+        let mut out: Vec<Clause> = Vec::new();
+        out.extend(self.satisfied.iter().cloned());
+
+        for (x, y) in &self.open {
+            out.push(x | y);
+        }
+
+        out
+    }
+
     fn sat_lit(&self, lit: Literal) -> bool {
         self.get(lit.0) == Some(lit.1)
     }
