@@ -24,6 +24,7 @@ impl Cdcl {
 
     // applies the decision both in the assignment, and the knowledge base.
     pub fn apply_decision(&mut self, lit: Literal, cause: Cause) {
+        assert!(self.get(lit.0).is_none());
         self.cause_stack.push(lit.0, (lit.1, cause));
 
         let neg = negate_literal(lit);
