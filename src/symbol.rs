@@ -23,7 +23,7 @@ pub fn get_gsymb_iter() -> Vec<(String, Id)> {
         .collect()
 }
 
-#[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug, Serialize)]
+#[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Debug, Serialize, Hash)]
 pub struct Id(pub usize);
 
 // implementation of symbol map.

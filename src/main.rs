@@ -1,7 +1,8 @@
 #![allow(unused_imports)]
 
-use std::collections::BTreeSet;
+use std::collections::{HashMap, BTreeSet};
 use std::sync::atomic::Ordering;
+use std::hash::Hash;
 
 mod parse;
 pub use parse::*;
@@ -17,6 +18,9 @@ pub use sudoku::*;
 
 mod dpll;
 pub use dpll::*;
+
+mod cdcl;
+pub use cdcl::*;
 
 mod knowledge_base;
 pub use knowledge_base::*;
@@ -36,22 +40,21 @@ fn main() -> std::io::Result<()> {
     print_sudoku(&s);
     let a = sudoku_to_knowledge_base(&s);
     let a = dedup_knowledge_base(a);
-    let mut state = State {
-        knowledge_base: a,
-        assignment: Assignment::new(),
+
+    let run = |algo: fn(KnowledgeBase) -> Outcome| {
+        match algo(a.clone()) {
+            Outcome::Sat(ass) => {
+                print_sudoku(&assigment_to_sudoku(&ass));
+            }
+            Outcome::Unsat => {
+                println!("Unsatisfied");
+            }
+        };
     };
-    state.simplify();
-    let knowledge_base_json = knowledge_base_to_json(&state.knowledge_base);
-    dump_json_to_file(&knowledge_base_json, "data/knowledge_base.json")?;
-    // println!("knowledge base:\n{}", a.draw());
-    match run_dpll(state.knowledge_base) {
-        Outcome::Sat(ass) => {
-            print_sudoku(&assigment_to_sudoku(&ass));
-        }
-        Outcome::Unsat => {
-            println!("Unsatisfied");
-        }
-    }
+
+    run(run_dpll);
+    run(run_cdcl);
+
     println!(
         "num decisions: {}",
         DECISION_COUNTER.load(Ordering::Relaxed)
