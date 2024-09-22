@@ -64,8 +64,9 @@ impl Cdcl {
     }
 
     fn current_assignment(&self) -> Assignment {
-        // self.cause_stack.iter().map(|(v, (b, _))| (v, b)).collect()
-        todo!()
+        self.cause_stack.iter()
+                         .map(|(v, (b, _))| (*v, *b))
+                         .collect()
     }
 
     fn simplify(&mut self) {
